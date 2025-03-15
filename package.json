@@ -6,6 +6,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start_api": "cd ./back && npm run start_api",
     "start_front": "cd ./front && npm run dev",
+    "init_api": "cd ./back && npm i",
+    "init_front": "cd ./front && npm i",
+    "init_core": "npm i",
+    "init_application": "npm run init_core && npm run init_api && npm run init_front",
     "start": "concurrently \"npm run start_api\" \"npm run start_front\""
   },
   "author": "",
