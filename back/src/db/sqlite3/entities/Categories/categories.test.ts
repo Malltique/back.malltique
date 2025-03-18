@@ -10,7 +10,6 @@ beforeAll(() => {});
 beforeEach(async () => {
     await inMemoryDb.execute(["DROP TABLE IF EXISTS Categories", undefined]);
     await inMemoryDb.execute([INITIALIZE_CATEGORIES_TABLE, undefined]);
-    // await inMemoryDb.execute(DELETE_ALL_CATEGORIES);
 });
 
 test("All categories repository", async () => {
