@@ -19,6 +19,12 @@ export const SELECT_ALL_CATEGORIES = [
     undefined,
 ] as const;
 
+export const SELECT_CATEGORIES_BY_IDS = (ids: number[]) =>
+    [
+        `SELECT * FROM Categories WHERE id in (${arrayTemplate(ids, false)})`,
+        ids,
+    ] as const;
+
 export const UPDATE_CATEGORY_BY_ID = (
     id: number,
     payload: Record<string, any>
@@ -36,6 +42,12 @@ export const INSERT_CATEGORIES = (payload: CreatePayload<CategoryDTO>[]) =>
 
 export const DELETE_CATEGORY_BY_ID = (id: number) =>
     ["DELETE FROM Categories WHERE id = ?", [id]] as const;
+
+export const DELETE_CATEGORIES_BY_IDS = (ids: number[]) =>
+    [
+        `DELETE FROM Categories WHERE id IN (${arrayTemplate(ids, false)})`,
+        ids,
+    ] as const;
 
 export const DELETE_ALL_CATEGORIES = [
     "DELETE FROM CATEGORIES",

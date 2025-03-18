@@ -12,7 +12,11 @@ export type Named<Name = string> = {
 };
 
 export type CreatePayload<T> = {
-    [k in keyof Omit<T, "id">]: T[k] extends Array<any> ? number[] : T[k];
+    [k in keyof Omit<T, "id">]: T[k] extends Array<any>
+        ? number[]
+        : T[k] extends object
+        ? number
+        : T[k];
 };
 
 export type OnlyPrimitives<G extends object> = {
