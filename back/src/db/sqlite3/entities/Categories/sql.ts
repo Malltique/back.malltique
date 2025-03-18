@@ -2,11 +2,14 @@ import { CreatePayload } from "../../../../entities/contracts";
 import { arrayTemplate, updatePayload } from "../../utils";
 import { CategoryDTO } from "./types";
 
-export const INITIALIZE_CATEGORIES_TABLE = `
+export const INITIALIZE_CATEGORIES_TABLE = [
+    `
     CREATE TABLE IF NOT EXISTS Categories (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL
-  )`;
+  )`,
+    undefined,
+] as const;
 
 export const SELECT_CATEGORY_BY_ID = (id: number) =>
     ["SELECT * FROM Categories WHERE id = ?", [id]] as const;
@@ -36,5 +39,10 @@ export const DELETE_CATEGORY_BY_ID = (id: number) =>
 
 export const DELETE_ALL_CATEGORIES = [
     "DELETE FROM CATEGORIES",
+    undefined,
+] as const;
+
+export const DROP_CATEGORIES_TABLE = [
+    "DROP TABLE IF EXISTS Categories",
     undefined,
 ] as const;

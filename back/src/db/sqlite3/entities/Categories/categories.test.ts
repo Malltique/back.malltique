@@ -1,15 +1,13 @@
-import { DELETE_ALL_CATEGORIES, INITIALIZE_CATEGORIES_TABLE } from "./sql";
+import { DROP_CATEGORIES_TABLE, INITIALIZE_CATEGORIES_TABLE } from "./sql";
 import { AllCategories } from "./repositories/AllCategories";
 import { generateInMemoryDb } from "../../utils";
 import { Category } from "./item";
 
 const inMemoryDb = generateInMemoryDb();
 
-beforeAll(() => {});
-
 beforeEach(async () => {
-    await inMemoryDb.execute(["DROP TABLE IF EXISTS Categories", undefined]);
-    await inMemoryDb.execute([INITIALIZE_CATEGORIES_TABLE, undefined]);
+    await inMemoryDb.execute(DROP_CATEGORIES_TABLE);
+    await inMemoryDb.execute(INITIALIZE_CATEGORIES_TABLE);
 });
 
 test("All categories repository", async () => {

@@ -6,11 +6,11 @@ const sqlite3 = sqliteWrapper.verbose();
 const db = new sqlite3.Database("./database.db");
 
 const prepareDB = (db: sqliteWrapper.Database) => {
-  db.exec(CategoriesSQL.INITIALIZE_TABLE);
+    db.exec(CategoriesSQL.INITIALIZE_CATEGORIES_TABLE[0]);
 };
 
 const main = () => {
-  prepareDB(db);
+    prepareDB(db);
 };
 
 main();
