@@ -11,7 +11,7 @@ export const INITIALIZE_TABLES = [
         product_id INTEGER,
         category_id INTEGER,
         FOREIGN KEY (product_id) REFERENCES Products(id),
-        FOREIGN KEY (category_id) REFERENCES Categories(id),
+        FOREIGN KEY (category_id) REFERENCES Categories(id)
     )
   `,
 ];

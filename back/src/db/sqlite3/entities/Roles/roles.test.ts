@@ -1,13 +1,14 @@
 import { generateInMemoryDb } from "../../utils";
 import { Role } from "./item";
+import { RolesWithIds } from "./repositories";
 import { AllRoles } from "./repositories/AllRoles";
 import { DROP_ROLES_TABLE, INITIALIZE_ROLES_TABLE } from "./sql";
 
 const inMemoryDb = generateInMemoryDb();
 
-beforeEach(() => {
-    inMemoryDb.execute(DROP_ROLES_TABLE);
-    inMemoryDb.execute(INITIALIZE_ROLES_TABLE);
+beforeEach(async () => {
+    await inMemoryDb.execute(DROP_ROLES_TABLE);
+    await inMemoryDb.execute(INITIALIZE_ROLES_TABLE);
 });
 
 test("All roles", async () => {
@@ -49,4 +50,22 @@ test("One role", async () => {
         { id: 2, name: "seller" },
         { id: 3, name: "admin" },
     ]);
+});
+
+test("Roles by ids", async () => {
+    const roles = new AllRoles(inMemoryDb);
+    await roles.create([
+        { name: "user" },
+        { name: "seller" },
+        { name: "admin" },
+    ]);
+    const rolesWithIds = new RolesWithIds(inMemoryDb, [1, 2]);
+    const model = await rolesWithIds.model();
+    expect(model).toMatchObject([
+        { id: 1, name: "user" },
+        { id: 2, name: "seller" },
+    ]);
+    await rolesWithIds.deleteAll();
+    const modelAfterDeletion = await roles.model();
+    expect(modelAfterDeletion).toMatchObject([{ id: 3, name: "admin" }]);
 });

@@ -1,3 +1,5 @@
+import { RunResult } from "sqlite3";
+
 /**
  * Shared
  */
@@ -24,14 +26,16 @@ export type HasAsyncModel<Model> = {
 };
 
 export type Item<DTO> = { id: () => number } & HasAsyncModel<DTO> & {
-        modify: (payload: ModifyPayload<DTO>) => Promise<void>;
-        delete: () => Promise<void>;
+        modify: (payload: ModifyPayload<DTO>) => Promise<RunResult>;
+        delete: () => Promise<RunResult>;
     };
 
 export type Repository<T> = T extends Item<infer DTO>
     ? HasAsyncModel<DTO[]> & {
-          create: (payload: CreatePayload<DTO>[]) => Promise<void>;
-          deleteAll: () => Promise<void>;
+          create: (
+              payload: CreatePayload<DTO>[]
+          ) => Promise<RunResult | RunResult[]>;
+          deleteAll: () => Promise<RunResult>;
       }
     : never;
 
