@@ -1,10 +1,10 @@
-import { Database } from "sqlite3";
+import { Database, RunResult, Statement } from "sqlite3";
 import sqliteWrapper from "sqlite3";
 
 export type DatabaseWithQueries = {
     getAll: <T>(queryData: readonly [string, any]) => Promise<T[]>;
     getOne: <T>(queryData: readonly [string, any]) => Promise<T>;
-    execute: (queryData: readonly [string, any]) => Promise<void>;
+    execute: (queryData: readonly [string, any]) => Promise<RunResult>;
 };
 
 export class Sqlite3Database implements DatabaseWithQueries {
@@ -35,26 +35,26 @@ export class Sqlite3Database implements DatabaseWithQueries {
     };
 
     public execute = ([sql, params]: readonly [string, any]) => {
-        if (params) {
-            return new Promise<void>((resolve, reject) => {
-                this.database.run(sql, params, (error) => {
-                    if (error) {
-                        reject(error);
-                    }
-
-                    resolve();
-                });
-            });
-        }
-        return new Promise<void>((resolve, reject) => {
-            this.database.exec(sql, (error) => {
+        // if (params) {
+        return new Promise<RunResult>((resolve, reject) => {
+            const a = this.database.run(sql, params, function (error) {
                 if (error) {
                     reject(error);
                 }
 
-                resolve();
+                resolve(this);
             });
         });
+        // }
+        // return new Promise<Statement>((resolve, reject) => {
+        //     this.database.exec(sql, function (error) {
+        //         if (error) {
+        //             reject(error);
+        //         }
+
+        //         resolve(this);
+        //     });
+        // });
     };
 }
 
@@ -64,8 +64,14 @@ export const updatePayload = (payload: object) => {
     return keysPart.join(", ");
 };
 
-export const arrayTemplate = (payload: any[]) =>
-    payload.map((x) => "(?)").join(", ");
+export const updateObject = (payload: object) => {
+    const keys = Object.keys(payload);
+    // @ts-ignore
+    return Object.fromEntries(keys.map((x) => [`:${x}`, payload[x]]));
+};
+
+export const arrayTemplate = (payload: any[], separate = true) =>
+    payload.map((x) => (separate ? "(?)" : "?")).join(", ");
 
 export const generateInMemoryDb = () => {
     const sqlite3 = sqliteWrapper.verbose();

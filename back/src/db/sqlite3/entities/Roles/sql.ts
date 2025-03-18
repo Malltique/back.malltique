@@ -24,10 +24,22 @@ export const SELECT_ALL_ROLES = [`SELECT * FROM Roles`, undefined] as const;
 export const SELECT_ROLE_BY_ID = (id: number) =>
     [`SELECT * FROM Roles WHERE id = ?`, [id]] as const;
 
+export const SELECT_ROLES_BY_IDS = (ids: number[]) =>
+    [
+        `SELECT * FROM Roles WHERE id IN (${arrayTemplate(ids, false)})`,
+        ids,
+    ] as const;
+
 export const DELETE_ALL_ROLES = ["DELETE FROM Roles", undefined] as const;
 
 export const DELETE_ROLE_BY_ID = (id: number) =>
     ["DELETE FROM Roles WHERE id = ?", [id]] as const;
+
+export const DELETE_ROLES_BY_IDS = (ids: number[]) =>
+    [
+        `DELETE FROM Roles WHERE id IN (${arrayTemplate(ids, false)})`,
+        ids,
+    ] as const;
 
 export const UPDATE_ROLE_BY_ID = (id: number, name: string) =>
     [
