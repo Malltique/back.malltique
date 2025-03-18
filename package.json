@@ -10,7 +10,8 @@
     "init_front": "cd ./front && npm i",
     "init_core": "npm i",
     "init_application": "npm run init_core && npm run init_api && npm run init_front",
-    "start": "concurrently \"npm run start_api\" \"npm run start_front\""
+    "start": "concurrently \"npm run start_api\" \"npm run start_front\"",
+    "prepare": "husky"
   },
   "author": "",
   "license": "ISC",

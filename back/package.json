@@ -6,8 +6,7 @@
     "scripts": {
         "init_db": "tsx --env-file=.env src/db.ts",
         "start_api": "tsx --env-file=.env --watch src/api/index.ts",
-        "test": "jest",
-        "prepare": "husky"
+        "test": "jest"
     },
     "author": "",
     "license": "ISC",
