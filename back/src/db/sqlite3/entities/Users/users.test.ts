@@ -27,16 +27,6 @@ test("Users", async () => {
     await allRoles.create([{ name: "admin" }, { name: "seller" }]);
     const allUsers = new AllUsers(inMemoryDb);
     await allUsers.create([{ name: "hello", email: "world", roles: [1, 2] }]);
-    // await inMemoryDb.execute([
-    //     "INSERT INTO Users (name, email) VALUES (?, ?)",
-    //     ["hello", "world"],
-    // ]);
-
-    // await inMemoryDb.execute([
-    //     "INSERT INTO UserRoles (user_id, role_id) VALUES (?, ?), (?, ?)",
-    //     [1, 1, 1, 2],
-    // ]);
-
     const user = new User(inMemoryDb, 1);
     const userModel = await user.model();
     expect(userModel).toMatchObject({
@@ -61,8 +51,4 @@ test("Users", async () => {
             { id: 2, name: "seller" },
         ],
     });
-
-    const al = new AllUsers(inMemoryDb);
-    await al.create([{ email: "ss", name: "safas", roles: [1] }]);
-    expect(true).toBe(true);
 });
