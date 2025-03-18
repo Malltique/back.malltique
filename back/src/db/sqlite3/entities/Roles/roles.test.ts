@@ -66,6 +66,7 @@ test("Roles by ids", async () => {
         { id: 2, name: "seller" },
     ]);
     await rolesWithIds.deleteAll();
+
     const modelAfterDeletion = await roles.model();
     expect(modelAfterDeletion).toMatchObject([{ id: 3, name: "admin" }]);
 });
