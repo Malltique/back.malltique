@@ -1,39 +1,36 @@
-import { DatabaseWithQueries, SQLHelpers } from "../../utils";
+import { DatabaseWithQueries } from "../../utils";
+import {
+    DELETE_CATEGORY_BY_ID,
+    SELECT_CATEGORY_BY_ID,
+    UPDATE_CATEGORY_BY_ID,
+} from "./sql";
 import { ICategory, CategoryDTO } from "./types";
 
-const sql = SQLHelpers.forTable("Categories");
-
 export class Category implements ICategory {
-  private constructor(
-    private readonly _database: DatabaseWithQueries,
-    private readonly _id: number
-  ) {}
+    public constructor(
+        private readonly _database: DatabaseWithQueries,
+        private readonly _id: number
+    ) {}
 
-  public static WithId = (database: DatabaseWithQueries, id: number) => {
-    return new Category(database, id);
-  };
+    id: ICategory["id"] = () => {
+        return this._id;
+    };
 
-  id: ICategory["id"] = () => {
-    return this._id;
-  };
+    model: ICategory["model"] = async () => {
+        const result = await this._database.getOne<CategoryDTO>(
+            SELECT_CATEGORY_BY_ID(this.id())
+        );
 
-  model: ICategory["model"] = async () => {
-    const result = await this._database.selectOneFromDatabase<CategoryDTO>(
-      sql.SELECT([`id = ${this._id}`])
-    );
+        return result;
+    };
 
-    return result;
-  };
+    delete: ICategory["delete"] = () => {
+        return this._database.execute(DELETE_CATEGORY_BY_ID(this.id()));
+    };
 
-  delete: ICategory["delete"] = () => {
-    return this._database.executeCommand(sql.DELETE([`id = ${this.id()}`]));
-  };
-
-  modify: ICategory["modify"] = (payload) => {
-    const a = sql.UPDATE(payload, [`id = ${this.id()}`]);
-    console.log("🚀 ~ Category ~ a:", a);
-    return this._database.executeCommand(
-      sql.UPDATE(payload, [`id = ${this.id()}`])
-    );
-  };
+    modify: ICategory["modify"] = (payload) => {
+        return this._database.execute(
+            UPDATE_CATEGORY_BY_ID(this.id(), payload)
+        );
+    };
 }

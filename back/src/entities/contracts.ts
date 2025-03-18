@@ -1,39 +1,45 @@
 /**
  * Shared
  */
-type Identified<Id = number> = {
-  id: Id;
+export type Identified<Id = number> = {
+    id: Id;
 };
 
-type Named<Name = string> = {
-  name: Name;
+export type Named<Name = string> = {
+    name: Name;
 };
 
-type CreatePayload<T> = Omit<T, "id">;
-
-type ModifyPayload<T> = Partial<CreatePayload<T>>;
-
-type HasAsyncModel<Model> = {
-  model: () => Promise<Model>;
+export type CreatePayload<T> = {
+    [k in keyof Omit<T, "id">]: T[k] extends Array<any> ? number[] : T[k];
 };
 
-type Item<DTO> = { id: () => number } & HasAsyncModel<DTO> & {
-    modify: (payload: ModifyPayload<DTO>) => Promise<void>;
-    delete: () => Promise<void>;
-  };
+export type OnlyPrimitives<G extends object> = {
+    [k in keyof G]: G[k] extends Array<any> ? never : G[k];
+};
 
-type Repository<T> = T extends Item<infer DTO>
-  ? HasAsyncModel<DTO[]> & {
-      create: (payload: CreatePayload<DTO>) => Promise<void>;
-      deleteAll: () => Promise<void>;
-    }
-  : never;
+export type ModifyPayload<T> = Partial<OnlyPrimitives<CreatePayload<T>>>;
 
-export type DTO<T, ID = number, Name = string> = T &
-  Identified<ID> &
-  Named<Name>;
+export type HasAsyncModel<Model> = {
+    model: () => Promise<Model>;
+};
+
+export type Item<DTO> = { id: () => number } & HasAsyncModel<DTO> & {
+        modify: (payload: ModifyPayload<DTO>) => Promise<void>;
+        delete: () => Promise<void>;
+    };
+
+export type Repository<T> = T extends Item<infer DTO>
+    ? HasAsyncModel<DTO[]> & {
+          create: (payload: CreatePayload<DTO>[]) => Promise<void>;
+          deleteAll: () => Promise<void>;
+      }
+    : never;
+
+export type DTO<T, Name = string, ID = number> = T &
+    Identified<ID> &
+    Named<Name>;
 
 export type DatabaseEntity<DTO> = {
-  Item: Item<DTO>;
-  Repository: Repository<Item<DTO>>;
+    Item: Item<DTO>;
+    Repository: Repository<Item<DTO>>;
 };
