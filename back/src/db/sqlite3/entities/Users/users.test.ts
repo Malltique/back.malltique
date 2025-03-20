@@ -26,13 +26,20 @@ test("Users", async () => {
     const allRoles = new AllRoles(inMemoryDb);
     await allRoles.create([{ name: "admin" }, { name: "seller" }]);
     const allUsers = new AllUsers(inMemoryDb);
-    await allUsers.create([{ name: "hello", email: "world", roles: [1, 2] }]);
+    await allUsers.create([
+        {
+            name: "user",
+            email: "user@user.user",
+            roles: [1, 2],
+            password: "hello",
+        },
+    ]);
     const user = new User(inMemoryDb, 1);
     const userModel = await user.model();
     expect(userModel).toMatchObject({
         id: 1,
-        name: "hello",
-        email: "world",
+        name: "user",
+        email: "user@user.user",
         roles: [
             { id: 1, name: "admin" },
             { id: 2, name: "seller" },
@@ -51,4 +58,26 @@ test("Users", async () => {
             { id: 2, name: "seller" },
         ],
     });
+});
+
+test("Login", async () => {
+    const users = new AllUsers(inMemoryDb);
+    await users.create([
+        { email: "test_mail", name: "name", password: "password", roles: [] },
+    ]);
+    const nonExistentUser = await users.login(
+        "non existent user",
+        "very wrong password"
+    );
+    expect(nonExistentUser).toMatchObject([undefined, "Not found"]);
+    const existingEmailWithWrongPassword = await users.login(
+        "test_mail",
+        "very wrong password"
+    );
+    expect(existingEmailWithWrongPassword).toMatchObject([
+        undefined,
+        "Wrong password",
+    ]);
+    const success = await users.login("test_mail", "password");
+    expect(success).toMatchObject([{ email: "test_mail" }, "Found"]);
 });
