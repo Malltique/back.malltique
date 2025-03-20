@@ -9,13 +9,19 @@ export const INITIALIZE_ORDERS_TABLE = [
     undefined,
 ] as const;
 
+export const INSERT_ORDER_FOR_USER = (userId: number) =>
+    [`INSERT INTO Orders (user_id) VALUES (?)`, [userId]] as const;
+
 export const INITIALIZE_ORDER_PRODUCTS_TABLE = [
     `
         CREATE TABLE IF NOT EXISTS OrderProducts (
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            order_id INTEGER NOT NULL,
             product_id INTEGER NOT NULL,
             quantity INTEGER NOT NULL,
-            FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE
+            FOREIGN KEY (product_id) REFERENCES Products(id) ON DELETE CASCADE,
+            FOREIGN KEY (order_id) REFERENCES Orders(id) ON DELETE CASCADE
+
         )
     `,
     undefined,
@@ -40,7 +46,7 @@ export const SELECT_PRODUCTS_DATA_BY_ORDER_ID = (orderId: number) =>
 export const SELECT_USER_ID_BY_ORDER_ID = (orderId: number) =>
     [
         `
-            SELECT user_id FROM Products WHERE id = ?
+            SELECT user_id FROM Orders WHERE id = ?
         `,
         [orderId],
     ] as const;
@@ -61,6 +67,8 @@ export const REMOVE_PRODUCT_FROM_ORDER = (orderId: number, productId: number) =>
         "REMOVE FROM OrderProducts WHERE order_id = ? AND product_id = ?",
         [orderId, productId],
     ] as const;
+
+export const REMOVE_ALL_ORDERS = ["REMOVE FROM Orders", undefined] as const;
 
 export const UPDATE_PRODUCT_QUANTITY_IN_ORDER = (
     orderId: number,

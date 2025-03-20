@@ -26,4 +26,12 @@ export type IOrder = Pick<DatabaseEntity<OrderDTO>["Item"], "id" | "model"> & {
     addProduct: (productId: number, quantity: number) => Promise<RunResult>;
 };
 
-export type IOrderRepository = DatabaseEntity<OrderDTO>["Repository"];
+export type IOrderRepository = Omit<
+    DatabaseEntity<OrderDTO>["Repository"],
+    "create" | "model"
+> & {
+    create: (payload: {
+        userId: number;
+        productsData: { productId: number; quantity: number }[];
+    }) => Promise<RunResult>;
+};

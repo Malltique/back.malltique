@@ -1,8 +1,5 @@
 import { RunResult } from "sqlite3";
 
-/**
- * Shared
- */
 export type Identified<Id = number> = {
     id: Id;
 };

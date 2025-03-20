@@ -40,7 +40,12 @@ export class Order implements IOrder {
         const model = await orderProductEntities.listModel();
 
         return {
-            buyer: user,
+            buyer: {
+                email: user.email,
+                id: user.id,
+                name: user.name,
+                roles: user.roles,
+            },
             id: this.id(),
             data: model.map((product) => ({
                 quantity: productsData.find((x) => x.product_id === product.id)!
