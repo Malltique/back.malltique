@@ -2,12 +2,12 @@ import { DROP_CATEGORIES_TABLE, INITIALIZE_CATEGORIES_TABLE } from "./sql";
 import { AllCategories } from "./repositories/AllCategories";
 import { generateInMemoryDb } from "../../utils";
 import { Category } from "./item";
+import { prepareDB } from "../../..";
 
 const inMemoryDb = generateInMemoryDb();
 
 beforeEach(async () => {
-    await inMemoryDb.execute(DROP_CATEGORIES_TABLE);
-    await inMemoryDb.execute(INITIALIZE_CATEGORIES_TABLE);
+    await prepareDB(inMemoryDb);
 });
 
 test("All categories repository", async () => {

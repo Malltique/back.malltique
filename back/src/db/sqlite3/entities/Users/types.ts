@@ -1,4 +1,4 @@
-import { DatabaseEntity, DTO } from "../../../../entities/contracts";
+import { DatabaseEntity, DTO } from "../../../../contracts";
 import { RoleDTO } from "../Roles/types";
 
 export type UserDTO = DTO<{

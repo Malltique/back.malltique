@@ -1,4 +1,4 @@
-import { updateObject, updatePayload } from "../../utils";
+import { arrayTemplate, updateObject, updatePayload } from "../../utils";
 
 /**
  * Create
@@ -40,6 +40,12 @@ export const SELECT_ALL_PRODUCT_LIST_DATA = [
 export const SELECT_PRODUCT_BY_ID = (id: number) =>
     [`SELECT * FROM Products WHERE id = ?`, [id]] as const;
 
+export const SELECT_PRODUCTS_BY_IDS = (ids: number[]) =>
+    [
+        `SELECT * FROM Products WHERE id IN (${arrayTemplate(ids, false)})`,
+        ids,
+    ] as const;
+
 export const SELECT_PRODUCT_CATEGORIES_IDS = (productId: number) =>
     [
         `SELECT category_id FROM ProductCategories WHERE product_id = ?`,
@@ -77,6 +83,12 @@ export const DELETE_PRODUCT_BY_ID = (id: number) =>
     [`DELETE FROM Products WHERE id = ?`, [id]] as const;
 
 export const DELETE_ALL_PRODUCTS = ["DELETE FROM Products", undefined] as const;
+
+export const DELETE_PRODUCTS_BY_IDS = (ids: number[]) =>
+    [
+        `DELETE FROM Products WHERE id IN (${arrayTemplate(ids, false)})`,
+        ids,
+    ] as const;
 
 /**
  * Insert

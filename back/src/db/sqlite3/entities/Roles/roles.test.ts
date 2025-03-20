@@ -1,3 +1,4 @@
+import { prepareDB } from "../../..";
 import { generateInMemoryDb } from "../../utils";
 import { Role } from "./item";
 import { RolesWithIds } from "./repositories";
@@ -7,8 +8,7 @@ import { DROP_ROLES_TABLE, INITIALIZE_ROLES_TABLE } from "./sql";
 const inMemoryDb = generateInMemoryDb();
 
 beforeEach(async () => {
-    await inMemoryDb.execute(DROP_ROLES_TABLE);
-    await inMemoryDb.execute(INITIALIZE_ROLES_TABLE);
+    await prepareDB(inMemoryDb);
 });
 
 test("All roles", async () => {
