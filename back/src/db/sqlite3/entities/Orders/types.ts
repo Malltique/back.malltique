@@ -1,5 +1,5 @@
 import { RunResult } from "sqlite3";
-import { DatabaseEntity, Identified } from "../../../../entities/contracts";
+import { DatabaseEntity, Identified } from "../../../../contracts";
 import { ListProductDTO } from "../Products";
 import { UserDTO } from "../Users/types";
 

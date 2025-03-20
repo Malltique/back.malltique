@@ -1,4 +1,4 @@
-import { DatabaseEntity, DTO } from "../../../../entities/contracts";
+import { DatabaseEntity, DTO } from "../../../../contracts";
 
 export type Roles = "user" | "seller" | "admin";
 

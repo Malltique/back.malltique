@@ -1,4 +1,4 @@
-import { OnlyPrimitives, CreatePayload } from "../../../../entities/contracts";
+import { OnlyPrimitives, CreatePayload } from "../../../../contracts";
 import { DatabaseWithQueries } from "../../utils";
 import { DELETE_ROLE_BY_ID, SELECT_ROLE_BY_ID, UPDATE_ROLE_BY_ID } from "./sql";
 import { IRole, RoleDTO } from "./types";

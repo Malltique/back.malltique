@@ -1,4 +1,4 @@
-import { CreatePayload } from "../../../../entities/contracts";
+import { CreatePayload } from "../../../../contracts";
 import { arrayTemplate, updatePayload } from "../../utils";
 import { CategoryDTO } from "./types";
 

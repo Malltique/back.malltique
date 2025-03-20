@@ -1,4 +1,4 @@
-import { DatabaseEntity, DTO } from "../../../../entities/contracts";
+import { DatabaseEntity, DTO } from "../../../../contracts";
 
 export type CategoryTitle = "foods" | "electronics";
 export type CategoryDTO = DTO<{}, CategoryTitle>;
