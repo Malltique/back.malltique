@@ -6,7 +6,8 @@ export const INITIALIZE_USERS_TABLE = [
         CREATE TABLE IF NOT EXISTS Users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            email TEXT NOT NULL
+            email TEXT NOT NULL,
+            hashed_password TEXT NOT NULL
         )
     `,
     undefined,
@@ -44,6 +45,9 @@ export const DELETE_USER_BY_ID = (userId: number) =>
 export const SELECT_USER_BY_ID = (userId: number) =>
     ["SELECT * FROM Users WHERE id = ?", [userId]] as const;
 
+export const SELECT_USER_BY_EMAIL = (email: string) =>
+    ["SELECT * FROM Users WHERE email = ?", [email]] as const;
+
 export const UPDATE_USER_BY_ID = (
     userId: number,
     payload: Record<string, any>
@@ -57,8 +61,8 @@ export const INSERT_USER = (
     userPayload: Parameters<IUsersRepository["create"]>[0][number]
 ) =>
     [
-        "INSERT INTO Users (name, email) VALUES (?, ?) RETURNING id",
-        [userPayload.name, userPayload.email],
+        "INSERT INTO Users (name, email, hashed_password) VALUES (?, ?, ?) RETURNING id",
+        [userPayload.name, userPayload.email, userPayload.password],
     ] as const;
 
 export const INSERT_USER_ROLES = (

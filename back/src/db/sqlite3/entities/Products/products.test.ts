@@ -47,7 +47,14 @@ test("Products basic case test", async () => {
     const products = new AllProducts(inMemoryDb);
 
     await roles.create([{ name: "seller" }]);
-    await users.create([{ roles: [1], email: "admin mail", name: "admin" }]);
+    await users.create([
+        {
+            roles: [1],
+            email: "admin mail",
+            name: "admin",
+            password: "password",
+        },
+    ]);
     await categories.create([{ name: "foods" }]);
     await products.create([
         {

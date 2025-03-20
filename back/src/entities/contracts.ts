@@ -34,10 +34,12 @@ export type Item<DTO> = { id: () => number } & HasAsyncModel<DTO> & {
         delete: () => Promise<RunResult>;
     };
 
-export type Repository<T> = T extends Item<infer DTO>
+export type Repository<T, AdditionalCreateParams = {}> = T extends Item<
+    infer DTO
+>
     ? HasAsyncModel<DTO[]> & {
           create: (
-              payload: CreatePayload<DTO>[]
+              payload: CreatePayload<DTO & AdditionalCreateParams>[]
           ) => Promise<RunResult | RunResult[]>;
           deleteAll: () => Promise<RunResult>;
       }
@@ -47,7 +49,7 @@ export type DTO<T, Name = string, ID = number> = T &
     Identified<ID> &
     Named<Name>;
 
-export type DatabaseEntity<DTO> = {
+export type DatabaseEntity<DTO, AdditionalCreateParams = {}> = {
     Item: Item<DTO>;
-    Repository: Repository<Item<DTO>>;
+    Repository: Repository<Item<DTO>, AdditionalCreateParams>;
 };
