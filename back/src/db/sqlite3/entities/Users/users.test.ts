@@ -1,3 +1,4 @@
+import { prepareDB } from "../../..";
 import { generateInMemoryDb } from "../../utils";
 import { AllRoles } from "../Roles/repositories/AllRoles";
 import { DROP_ROLES_TABLE, INITIALIZE_ROLES_TABLE } from "../Roles/sql";
@@ -13,13 +14,7 @@ import {
 const inMemoryDb = generateInMemoryDb();
 
 beforeEach(async () => {
-    await inMemoryDb.execute(DROP_ROLES_TABLE);
-    await inMemoryDb.execute(DROP_USERS_TABLE);
-    await inMemoryDb.execute(DROP_USER_ROLES_TABLE);
-
-    await inMemoryDb.execute(INITIALIZE_ROLES_TABLE);
-    await inMemoryDb.execute(INITIALIZE_USERS_TABLE);
-    await inMemoryDb.execute(INITIALIZE_USER_ROLES_TABLE);
+    await prepareDB(inMemoryDb);
 });
 
 test("Users", async () => {
@@ -62,14 +57,17 @@ test("Users", async () => {
 
 test("Login", async () => {
     const users = new AllUsers(inMemoryDb);
+
     await users.create([
         { email: "test_mail", name: "name", password: "password", roles: [] },
     ]);
+
     const nonExistentUser = await users.login(
         "non existent user",
         "very wrong password"
     );
     expect(nonExistentUser).toMatchObject([undefined, "Not found"]);
+
     const existingEmailWithWrongPassword = await users.login(
         "test_mail",
         "very wrong password"
@@ -78,6 +76,7 @@ test("Login", async () => {
         undefined,
         "Wrong password",
     ]);
+
     const success = await users.login("test_mail", "password");
     expect(success).toMatchObject([{ email: "test_mail" }, "Found"]);
 });

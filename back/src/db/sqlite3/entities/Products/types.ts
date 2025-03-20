@@ -12,12 +12,12 @@ export type ProductDTO = DTO<{
     description: string;
 }>;
 
+export type ListProductDTO = Identified & Named & { description: string };
+
 export type IProduct = DatabaseEntity<ProductDTO>["Item"];
 export type IProductsRepository = Omit<
     DatabaseEntity<ProductDTO>["Repository"],
     "model"
 > & {
-    listModel: () => Promise<
-        Array<Identified & Named & { description: string }>
-    >;
+    listModel: () => Promise<Array<ListProductDTO>>;
 };

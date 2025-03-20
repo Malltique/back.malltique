@@ -35,7 +35,6 @@ export class Sqlite3Database implements DatabaseWithQueries {
     };
 
     public execute = ([sql, params]: readonly [string, any]) => {
-        // if (params) {
         return new Promise<RunResult>((resolve, reject) => {
             const a = this.database.run(sql, params, function (error) {
                 if (error) {
@@ -45,16 +44,6 @@ export class Sqlite3Database implements DatabaseWithQueries {
                 resolve(this);
             });
         });
-        // }
-        // return new Promise<Statement>((resolve, reject) => {
-        //     this.database.exec(sql, function (error) {
-        //         if (error) {
-        //             reject(error);
-        //         }
-
-        //         resolve(this);
-        //     });
-        // });
     };
 }
 
