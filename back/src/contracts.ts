@@ -50,3 +50,5 @@ export type DatabaseEntity<DTO, AdditionalCreateParams = {}> = {
     Item: Item<DTO>;
     Repository: Repository<Item<DTO>, AdditionalCreateParams>;
 };
+
+export type Parameter<T extends (...args: any) => any> = Parameters<T>[0];
