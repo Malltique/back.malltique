@@ -1,4 +1,4 @@
-import { Express, Request, Response } from "express";
+import { Express } from "express";
 import { buildURL } from "../../utils";
 import { authMiddleware, SECRET_KEY } from "../../middlewares";
 import { CreateRole, GetRoles } from "./types";
