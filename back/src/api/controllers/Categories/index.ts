@@ -20,8 +20,8 @@ export const injectCategoriesController = (app: Application) => {
             res: Response<GetCategoryById["Response"]>
         ) => {
             const { id } = req.params;
-            const tag = new SQLite3Entities.Category(sqlite3Db, +id);
-            const model = await tag.model();
+            const category = new SQLite3Entities.Category(sqlite3Db, +id);
+            const model = await category.model();
             res.json(model);
         }
     );
