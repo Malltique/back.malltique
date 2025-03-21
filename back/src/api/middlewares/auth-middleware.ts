@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 export const SECRET_KEY = "secret enough to be commited lol";
 
-export const authMiddleware: (aecretKey: string) => RequestHandler =
+export const authMiddleware: (secretKey: string) => RequestHandler =
     (secretKey) => (req, res, next) => {
         const token = req.headers["authorization"];
 
