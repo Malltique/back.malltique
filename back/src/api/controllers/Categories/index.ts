@@ -1,21 +1,24 @@
 import { Application, Request, Response } from "express";
-import { sqlite3Db, SQLite3Entities } from "../../db";
-import { verifyToken } from "./AuthController";
+import { sqlite3Db, SQLite3Entities } from "../../../db";
+import { buildURL } from "../../utils";
+import { authMiddleware, SECRET_KEY } from "../../middlewares";
 import {
-    CategoryDTO,
-    ICategory,
-    ICategoriesRepository,
-} from "../../db/sqlite3/entities";
-import { Parameter } from "./types";
-import { buildURL } from "../utils";
+    CreateCategory,
+    GetAllCategories,
+    GetCategoryById,
+    ModifyCategoryById,
+} from "./types";
 
 const url = buildURL("categories");
 
 export const injectCategoriesController = (app: Application) => {
     app.get(
         url(":id"),
-        verifyToken,
-        async (req: Request<{ id: string }>, res: Response<CategoryDTO>) => {
+        authMiddleware(SECRET_KEY),
+        async (
+            req: Request<GetCategoryById["Request"]>,
+            res: Response<GetCategoryById["Response"]>
+        ) => {
             const { id } = req.params;
             const tag = new SQLite3Entities.Category(sqlite3Db, +id);
             const model = await tag.model();
@@ -23,17 +26,25 @@ export const injectCategoriesController = (app: Application) => {
         }
     );
 
-    app.get(url(), verifyToken, async (_, res: Response<CategoryDTO[]>) => {
-        const categories = new SQLite3Entities.AllCategories(sqlite3Db);
-        const model = await categories.model();
-        res.json(model);
-    });
+    app.get(
+        url(),
+        authMiddleware(SECRET_KEY),
+        async (_, res: Response<GetAllCategories["Response"]>) => {
+            const categories = new SQLite3Entities.AllCategories(sqlite3Db);
+            const model = await categories.model();
+            res.json(model);
+        }
+    );
 
     app.patch(
         url(":id"),
-        verifyToken,
+        authMiddleware(SECRET_KEY),
         async (
-            req: Request<{ id: string }, {}, Parameter<ICategory["modify"]>>,
+            req: Request<
+                ModifyCategoryById["Request"]["Query"],
+                {},
+                ModifyCategoryById["Request"]["Body"]
+            >,
             res
         ) => {
             const category = new SQLite3Entities.Category(
@@ -51,11 +62,8 @@ export const injectCategoriesController = (app: Application) => {
 
     app.post(
         url(),
-        verifyToken,
-        async (
-            req: Request<{}, {}, Parameter<ICategoriesRepository["create"]>>,
-            res
-        ) => {
+        authMiddleware(SECRET_KEY),
+        async (req: Request<{}, {}, CreateCategory["Request"]>, res) => {
             const categories = new SQLite3Entities.AllCategories(sqlite3Db);
             try {
                 await categories.create(req.body);
