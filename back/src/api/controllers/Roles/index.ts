@@ -8,20 +8,20 @@ import { sqlite3Db } from "../../../db";
 const url = buildURL("roles");
 
 export const injectRolesController = (app: Express) => {
-    app.post(
+    app.post<{}, {}, CreateRole["Request"]>(
         url(),
         authMiddleware(SECRET_KEY),
-        async (req: Request<{}, {}, CreateRole["Request"]>, res: Response) => {
+        async (req, res) => {
             const roles = new AllRoles(sqlite3Db);
             await roles.create(req.body);
             res.sendStatus(200);
         }
     );
 
-    app.get(
+    app.get<{}, GetRoles["Response"], {}>(
         url(),
         authMiddleware(SECRET_KEY),
-        async (req, res: Response<GetRoles["Response"]>) => {
+        async (_, res) => {
             const roles = new AllRoles(sqlite3Db);
             const model = await roles.model();
             res.json(model);
