@@ -3,7 +3,11 @@ import {
     OpenAPIRegistry,
 } from "@asteasolutions/zod-to-openapi";
 import { z } from "zod";
-import { CreateProductsSchema, ListProductSchema } from "./schemas";
+import {
+    CreateProductsSchema,
+    DeleteProductsByIdsRequestSchema,
+    ListProductSchema,
+} from "./schemas";
 import { AuthorizationHeaderSchema } from "../shared-schemas";
 
 extendZodWithOpenApi(z);
@@ -38,6 +42,27 @@ export const injectProductsControllerInSwagger = (
         },
         request: {
             headers: AuthorizationHeaderSchema,
+        },
+    });
+
+    registry.registerPath({
+        method: "delete",
+        path: "/products",
+        tags: ["Products controller"],
+        responses: {
+            200: { description: "Products with given ids were deleted" },
+            400: { description: "Incorrect input model from client" },
+            500: { description: "Server error" },
+        },
+        request: {
+            headers: AuthorizationHeaderSchema,
+            body: {
+                content: {
+                    "application/json": {
+                        schema: DeleteProductsByIdsRequestSchema,
+                    },
+                },
+            },
         },
     });
 };
