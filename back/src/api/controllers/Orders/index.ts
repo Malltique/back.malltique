@@ -1,7 +1,12 @@
 import { Express } from "express";
 import { buildURL } from "../../utils";
 import { authMiddleware, SECRET_KEY } from "../../middlewares";
-import { CreateOrder, GetOrder } from "./types";
+import {
+    CreateOrder,
+    CreateOrderSchema,
+    GetOrder,
+    GetOrderByIdRequestSchema,
+} from "./schemas";
 import { AllOrders } from "../../../db/sqlite3/entities/Orders/repositories";
 import { sqlite3Db } from "../../../db";
 import { Order } from "../../../db/sqlite3/entities/Orders/item";
@@ -13,8 +18,14 @@ export const injectOrdersController = (app: Express) => {
         url(),
         authMiddleware(SECRET_KEY),
         async (req, res) => {
+            const { success, data, error } = CreateOrderSchema.safeParse(
+                req.body
+            );
+            if (!success) {
+                res.status(400).json(error);
+            }
             const orders = new AllOrders(sqlite3Db);
-            await orders.create(req.body);
+            await orders.create(data!);
             res.sendStatus(200);
         }
     );
@@ -23,7 +34,13 @@ export const injectOrdersController = (app: Express) => {
         url(":id"),
         authMiddleware(SECRET_KEY),
         async (req, res) => {
-            const order = new Order(sqlite3Db, +req.params.id);
+            const { success, data, error } =
+                GetOrderByIdRequestSchema.safeParse(req.params);
+            if (!success) {
+                res.status(400).json(error);
+                return;
+            }
+            const order = new Order(sqlite3Db, +data!.id);
             const model = await order.model();
             res.json(model);
         }
