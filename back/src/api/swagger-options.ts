@@ -6,12 +6,14 @@ import {
 import { injectAuthControllerInSwagger } from "./controllers/Auth/swagger";
 import { injectProductsControllerInSwagger } from "./controllers/Products/swagger";
 import { injectCategoriesControllerInSwagger } from "./controllers/Categories/swagger";
+import { injectRolesControllerInSwagger } from "./controllers/Roles/swagger";
 
 const openAPIRegistry = new OpenAPIRegistry();
 
 injectAuthControllerInSwagger(openAPIRegistry);
 injectProductsControllerInSwagger(openAPIRegistry);
 injectCategoriesControllerInSwagger(openAPIRegistry);
+injectRolesControllerInSwagger(openAPIRegistry);
 
 const generator = new OpenApiGeneratorV3(openAPIRegistry.definitions);
 

@@ -9,15 +9,18 @@ extendZodWithOpenApi(z);
 export const GetCategoryByIdRequestSchema = IdSchema;
 export const ModifyCategoryByIdQueryRequestSchema = IdSchema;
 export const ModifyCategoryByIdQueryBodySchema = z.object({
-    name: z.string().openapi({ example: "Super-admin" }),
+    name: z.string().openapi({ example: "Electronics" }),
 });
 
-export const CategorySchema = z.object({ id: z.number(), name: z.string() });
+export const CategorySchema = z.object({
+    id: z.number(),
+    name: z.string().openapi({ example: "Foods" }),
+});
 export const CategoriesSchema = z.array(CategorySchema);
 
 export const CreateCategoriesSchema = z.array(
     z.object({
-        name: z.string().openapi({ description: "Seller" }),
+        name: z.string().openapi({ description: "Foods" }),
     })
 );
 
