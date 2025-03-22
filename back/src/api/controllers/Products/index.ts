@@ -1,9 +1,13 @@
-import { Express, Request, Response } from "express";
+import { Express } from "express";
 import { buildURL } from "../../utils";
 import { authMiddleware, SECRET_KEY } from "../../middlewares";
 import { AllProducts } from "../../../db/sqlite3/entities/Products/repositories";
 import { sqlite3Db } from "../../../db";
-import { CreateProducts, GetAllProducts } from "./types";
+import {
+    CreateProductsSchema,
+    CreateProducts,
+    GetAllProducts,
+} from "./schemas";
 
 const url = buildURL("products");
 
@@ -13,7 +17,13 @@ export const injectProductsController = (app: Express) => {
         authMiddleware(SECRET_KEY),
         async (req, res) => {
             const products = new AllProducts(sqlite3Db);
-            await products.create(req.body);
+            const { success, data, error } = CreateProductsSchema.safeParse(
+                req.body
+            );
+            if (!success) {
+                res.status(400).json(error);
+            }
+            await products.create(data!);
             res.sendStatus(200);
         }
     );

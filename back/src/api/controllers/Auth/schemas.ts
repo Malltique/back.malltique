@@ -3,12 +3,15 @@ import { z } from "zod";
 
 extendZodWithOpenApi(z);
 
-export const ResisterRequestSchema = z
+export const RegisterRequestSchema = z
     .object({
-        email: z.string().openapi({ description: "What is up my email" }),
+        email: z.string(),
         name: z.string(),
         password: z.string(),
-        roles: z.array(z.number()),
+        roles: z.array(z.number()).openapi({
+            description:
+                "Identificators of roles will be given to created user",
+        }),
     })
     .openapi("Registration payload");
 
@@ -24,11 +27,12 @@ export const LoginResponseSchema = z
         token: z.string().openapi({
             description: "Encoded JWT token with user information",
         }),
+        status: z.enum(["Success", "Wrong password", "Not registered user"]),
     })
-    .openapi("Login response");
+    .openapi("Login response payload");
 
 export type Register = {
-    Request: z.infer<typeof ResisterRequestSchema>;
+    Request: z.infer<typeof RegisterRequestSchema>;
 };
 
 export type Login = {

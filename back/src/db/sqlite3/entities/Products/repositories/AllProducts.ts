@@ -15,16 +15,23 @@ export class AllProducts implements IProductsRepository {
     create: IProductsRepository["create"] = async (payload) => {
         const promise = Promise.all(
             payload.map(async (payloadData) => {
-                const { lastID } = await this._database.execute(
+                const runResult = await this._database.execute(
                     INSERT_PRODUCT_DATA({
                         description: payloadData.description,
                         name: payloadData.name,
                         seller: payloadData.seller,
                     })
                 );
-                return this._database.execute(
-                    INSERT_PRODUCT_CATEGORIES(lastID, payloadData.categories)
-                );
+                if (payloadData.categories.length) {
+                    await this._database.execute(
+                        INSERT_PRODUCT_CATEGORIES(
+                            runResult.lastID,
+                            payloadData.categories
+                        )
+                    );
+                }
+
+                return runResult;
             })
         );
 

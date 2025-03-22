@@ -60,7 +60,7 @@ export const prepareDB = async (db: DatabaseWithQueries) => {
 };
 
 const main = () => {
-    prepareDB(sqlite3Db);
+    createAllTables(sqlite3Db);
 };
 
 main();
