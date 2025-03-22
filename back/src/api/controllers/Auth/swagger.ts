@@ -2,7 +2,7 @@ import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import {
     LoginRequestSchema,
     LoginResponseSchema,
-    ResisterRequestSchema,
+    RegisterRequestSchema,
 } from "./schemas";
 
 export const injectAuthControllerInSwagger = (registry: OpenAPIRegistry) => {
@@ -12,13 +12,13 @@ export const injectAuthControllerInSwagger = (registry: OpenAPIRegistry) => {
         tags: ["Auth controller"],
         description: "Method for new users registration",
         responses: {
-            ["200"]: { description: "New user was registered" },
+            "200": { description: "New user was registered" },
         },
         request: {
             body: {
                 content: {
                     "application/json": {
-                        schema: ResisterRequestSchema,
+                        schema: RegisterRequestSchema,
                     },
                 },
             },

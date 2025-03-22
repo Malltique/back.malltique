@@ -2,14 +2,14 @@ import { Options } from "swagger-jsdoc";
 import {
     OpenAPIRegistry,
     OpenApiGeneratorV3,
-    extendZodWithOpenApi,
 } from "@asteasolutions/zod-to-openapi";
-import { z } from "zod";
 import { injectAuthControllerInSwagger } from "./controllers/Auth/swagger";
+import { injectProductsControllerInSwagger } from "./controllers/Products/swagger";
 
 const openAPIRegistry = new OpenAPIRegistry();
 
 injectAuthControllerInSwagger(openAPIRegistry);
+injectProductsControllerInSwagger(openAPIRegistry);
 
 const generator = new OpenApiGeneratorV3(openAPIRegistry.definitions);
 
