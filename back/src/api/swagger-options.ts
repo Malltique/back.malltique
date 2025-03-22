@@ -20,9 +20,8 @@ const generator = new OpenApiGeneratorV3(openAPIRegistry.definitions);
 const swaggerDefinition = generator.generateDocument({
     openapi: "3.0.0",
     info: {
-        title: "My API",
+        title: "Malltique API",
         version: "1.0.0",
-        description: "API description",
     },
 
     servers: [
@@ -34,7 +33,7 @@ const swaggerDefinition = generator.generateDocument({
 
 const options: Options = {
     swaggerDefinition,
-    apis: ["./src/api/controllers/Auth/index.ts"], // Укажите путь к вашим файлам с комментариями API
+    apis: [],
 };
 
 export default options;
