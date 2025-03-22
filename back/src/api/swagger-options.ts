@@ -5,11 +5,13 @@ import {
 } from "@asteasolutions/zod-to-openapi";
 import { injectAuthControllerInSwagger } from "./controllers/Auth/swagger";
 import { injectProductsControllerInSwagger } from "./controllers/Products/swagger";
+import { injectCategoriesControllerInSwagger } from "./controllers/Categories/swagger";
 
 const openAPIRegistry = new OpenAPIRegistry();
 
 injectAuthControllerInSwagger(openAPIRegistry);
 injectProductsControllerInSwagger(openAPIRegistry);
+injectCategoriesControllerInSwagger(openAPIRegistry);
 
 const generator = new OpenApiGeneratorV3(openAPIRegistry.definitions);
 
